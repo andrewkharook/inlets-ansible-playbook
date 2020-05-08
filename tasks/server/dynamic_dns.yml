@@ -1,0 +1,21 @@
+---
+- name: SETUP DYNAMIC DNS
+  file:
+    path: "{{ dns_dir }}"
+    state: directory
+
+- name: Installing shell script...
+  shell: echo 'echo url="https://www.duckdns.org/update?domains={{ duckdns_subdomain }}&token={{ duckdns_api_key }}&ip=" | curl -k -o {{ dns_dir }}/duck.log -K -' > '{{ dns_dir }}/duck.sh'
+  args:
+    chdir: "{{ dns_dir }}/"
+
+- name: Setting file permissions...
+  file:
+    path: "{{ dns_dir }}/duck.sh"
+    mode: "700"
+
+- name: Setting up cron job...
+  cron:
+    name: duckdns
+    minute: "*/5"
+    job: "{{ dns_dir }}/duck.sh >/dev/null 2>&1"

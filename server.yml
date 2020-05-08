@@ -1,0 +1,19 @@
+---
+- hosts: '{{ ansible_exit_node }}'
+  become: yes
+
+  vars_files:
+    - vars.yml
+
+  tasks:
+    - package: name=supervisor state=present
+
+    - import_tasks: tasks/server/dynamic_dns.yml
+      vars:
+        dns_dir: '{{ pwd }}/duckdns'
+
+    - import_tasks: tasks/server/inlets.yml
+
+    - import_tasks: tasks/server/caddy.yml
+      vars:
+        caddy_dir: '{{ pwd }}/caddy'

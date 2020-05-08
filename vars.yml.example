@@ -1,0 +1,9 @@
+---
+pwd: WORKING_DIR 
+inlets_token: INLETS_TOKEN 
+inlets_exit_node: mydomain.duckdns.org
+inlets_host_node: http://127.0.0.1:3000
+duckdns_subdomain: mydomain
+duckdns_api_key: DUCKDNS_API_KEY
+ansible_exit_node: SERVER 
+ansible_host_node: CLIENT

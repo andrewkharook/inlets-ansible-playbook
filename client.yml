@@ -1,0 +1,11 @@
+---
+- hosts: '{{ ansible_host_node }}'
+  become: yes
+
+  vars_files:
+    - vars.yml
+
+  tasks:
+    - package: name=supervisor state=present
+
+    - import_tasks: tasks/client/inlets.yml

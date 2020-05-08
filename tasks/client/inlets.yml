@@ -1,0 +1,14 @@
+---
+- name: INSTALL INLETS CLIENT
+  shell: curl -sLS https://get.inlets.dev | sh
+
+- name: Create supervisor config
+  shell: |
+    echo '[program:inlets]
+    command=inlets client --remote wss://{{ inlets_exit_node }} --upstream={{ inlets_exit_node }}={{ inlets_host_node }} --token="{{ inlets_token }}"
+    ' >> /etc/supervisor/conf.d/inlets.conf
+
+- name: Start Inlets client
+  supervisorctl:
+    name: inlets
+    state: started

@@ -1,0 +1,42 @@
+---
+- name: INSTALL WEB SERVER
+  file: 
+    path: '{{ caddy_dir }}'
+    state: directory  
+
+- name: Download & setup 
+  shell: |
+    curl -sLSf https://github.com/caddyserver/caddy/releases/download/v1.0.4/caddy_v1.0.4_linux_amd64.tar.gz > caddy_v1.0.4_linux_amd64.tar.gz
+    tar -xvf caddy_v1.0.4_linux_amd64.tar.gz --strip-components=0
+  args:
+    chdir: '{{ caddy_dir }}/'
+
+- name: Configure web server
+  shell: |
+    echo '
+    {{ inlets_exit_node }} 
+    log {{ caddy_dir }}/logs/access.log
+    
+    proxy / 127.0.0.1:8080 {
+      transparent
+    }
+    
+    proxy /tunnel 127.0.0.1:8080 {
+      transparent
+      websocket
+    }
+    ' > Caddyfile
+  args:
+    chdir: '{{ caddy_dir }}/'
+
+- name: Create supervisor config
+  shell: |
+    echo '[program:caddy]
+    command={{ caddy_dir }}/caddy -conf {{ caddy_dir }}/Caddyfile
+    ' >> /etc/supervisor/conf.d/caddy.conf
+
+- name: Start web server
+  supervisorctl:
+    name: caddy 
+    state: started
+

@@ -1,0 +1,14 @@
+---
+- name: INSTALL INLETS
+  shell: curl -sLS https://get.inlets.dev | sh
+
+- name: Create supervisor config
+  shell: |
+    echo '[program:inlets]
+    command=inlets server --port=8080 --token="{{ inlets_token }}"
+    ' >> /etc/supervisor/conf.d/inlets.conf
+
+- name: Start Inlets server
+  supervisorctl:
+    name: inlets
+    state: started
