@@ -9,7 +9,7 @@ The script was inspired by the official inlets tutorial that can be found on [Al
 - you'll need Ansible installed on your local computer. Take a look at [the docs](https://docs.ansible.com/ansible/latest/installation_guide/index.html) to find the installation guide for your OS.
 
 ## How to run
-- rename the `vars.yml.example` to `vars.yml` and update config variables (see "Variables" section below).
+- rename the `vars.yml.example` to `vars.yml` and update config variables (see [Variables](#variables) section below).
 - run the `server.yml` playbook to set up Inlets server on the exit node:
 
 ```
